@@ -1,0 +1,141 @@
+2025-11-26 02:43:27,178 - __main__ - INFO - ============================================================
+2025-11-26 02:43:27,178 - __main__ - INFO - STEP 1: LOADING AND VALIDATING DATA
+2025-11-26 02:43:27,178 - __main__ - INFO - ============================================================
+2025-11-26 02:43:27,205 - __main__ - INFO - ✓ Loaded 17070 records from processed_microgrid_data.csv
+2025-11-26 02:43:27,205 - __main__ - INFO -   Date range: 2006-12-16 18:00:00 to 2008-11-26 23:00:00
+2025-11-26 02:43:27,208 - __main__ - INFO -   demand_kwh: 585 outliers (3.43%)
+2025-11-26 02:43:27,210 - __main__ - INFO -   generation_kwh: 8460 outliers (49.56%)
+2025-11-26 02:43:27,210 - __main__ - WARNING -   ⚠️ High outlier percentage in generation_kwh
+2025-11-26 02:43:27,210 - __main__ - INFO - 
+STEP 2: FEATURE ENGINEERING
+2025-11-26 02:43:27,210 - __main__ - INFO - ------------------------------------------------------------
+2025-11-26 02:43:27,213 - __main__ - INFO - ✓ Created temporal features
+2025-11-26 02:43:27,220 - __main__ - INFO - ✓ Created demand lag and rolling features
+2025-11-26 02:43:27,224 - __main__ - INFO - ✓ Created solar lag features
+2025-11-26 02:43:27,228 - __main__ - INFO - ✓ Created interaction features
+2025-11-26 02:43:27,230 - __main__ - INFO - ✓ Dropped 168 rows with NaN from feature engineering
+2025-11-26 02:43:27,230 - __main__ - INFO - ✓ No temporal overlap: Train ends 2008-07-09 02:00:00, Test starts 2008-07-09 03:00:00
+2025-11-26 02:43:27,230 - __main__ - INFO - 
+✓ Train: 13521 samples (2006-12-23 18:00:00 to 2008-07-09 02:00:00)
+2025-11-26 02:43:27,230 - __main__ - INFO - ✓ Test:  3381 samples (2008-07-09 03:00:00 to 2008-11-26 23:00:00)
+2025-11-26 02:43:27,230 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:27,230 - __main__ - INFO - TRAINING DEMAND MODEL
+2025-11-26 02:43:27,230 - __main__ - INFO - ============================================================
+2025-11-26 02:43:27,231 - __main__ - INFO - 
+📋 Feature Set (19 features):
+2025-11-26 02:43:27,231 - __main__ - INFO -    1. hour
+2025-11-26 02:43:27,231 - __main__ - INFO -    2. dayofweek
+2025-11-26 02:43:27,231 - __main__ - INFO -    3. is_weekend
+2025-11-26 02:43:27,231 - __main__ - INFO -    4. month
+2025-11-26 02:43:27,231 - __main__ - INFO -    5. hour_sin
+2025-11-26 02:43:27,231 - __main__ - INFO -    6. hour_cos
+2025-11-26 02:43:27,231 - __main__ - INFO -    7. is_night
+2025-11-26 02:43:27,232 - __main__ - INFO -    8. demand_kwh_lag_1
+2025-11-26 02:43:27,232 - __main__ - INFO -    9. demand_kwh_lag_2
+2025-11-26 02:43:27,232 - __main__ - INFO -    10. demand_kwh_lag_24
+2025-11-26 02:43:27,232 - __main__ - INFO -    11. demand_kwh_lag_168
+2025-11-26 02:43:27,232 - __main__ - INFO -    12. demand_kwh_roll_mean_12h
+2025-11-26 02:43:27,232 - __main__ - INFO -    13. demand_kwh_roll_std_12h
+2025-11-26 02:43:27,232 - __main__ - INFO -    14. demand_kwh_roll_mean_24h
+2025-11-26 02:43:27,232 - __main__ - INFO -    15. demand_kwh_roll_std_24h
+2025-11-26 02:43:27,232 - __main__ - INFO -    16. demand_kwh_roll_mean_168h
+2025-11-26 02:43:27,232 - __main__ - INFO -    17. demand_kwh_roll_std_168h
+2025-11-26 02:43:27,232 - __main__ - INFO -    18. temperature
+2025-11-26 02:43:27,232 - __main__ - INFO -    19. temp_hour_interaction
+2025-11-26 02:43:27,232 - __main__ - INFO - 
+  🔍 Tuning hyperparameters for DEMAND...
+2025-11-26 02:43:33,318 - __main__ - INFO -   ✓ Best CV MAE: 0.4695
+2025-11-26 02:43:33,318 - __main__ - INFO -   ✓ Best params: {'subsample': 1.0, 'n_estimators': 1000, 'min_child_weight': 1, 'max_depth': 6, 'learning_rate': 0.03, 'gamma': 0.2, 'colsample_bytree': 0.8}
+2025-11-26 02:43:33,318 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:33,318 - __main__ - INFO - EVALUATION: DEMAND MODEL
+2025-11-26 02:43:33,318 - __main__ - INFO - ============================================================
+2025-11-26 02:43:33,368 - __main__ - INFO - 
+📊 Training Set:
+2025-11-26 02:43:33,368 - __main__ - INFO -    MAE:  0.3324 kWh
+2025-11-26 02:43:33,368 - __main__ - INFO -    RMSE: 0.4754 kWh
+2025-11-26 02:43:33,368 - __main__ - INFO - 
+📊 Test Set:
+2025-11-26 02:43:33,368 - __main__ - INFO -    MAE:  0.3399 kWh
+2025-11-26 02:43:33,368 - __main__ - INFO -    RMSE: 0.5227 kWh
+2025-11-26 02:43:33,368 - __main__ - INFO -    MAPE: 40.29%
+2025-11-26 02:43:33,369 - __main__ - INFO - 
+📈 Baseline Comparison:
+2025-11-26 02:43:33,369 - __main__ - INFO -    Naive forecast MAE:    0.7758
+2025-11-26 02:43:33,369 - __main__ - INFO -    Seasonal avg MAE:      0.7604
+2025-11-26 02:43:33,369 - __main__ - INFO - 
+✨ Model Improvement:
+2025-11-26 02:43:33,369 - __main__ - INFO -    vs Naive:    +56.2%
+2025-11-26 02:43:33,369 - __main__ - INFO -    vs Seasonal: +55.3%
+2025-11-26 02:43:34,127 - __main__ - INFO -   ✓ Forecast visualization saved to forecast_demand.png
+2025-11-26 02:43:34,621 - __main__ - INFO -   ✓ Feature importance saved to importance_demand.png
+2025-11-26 02:43:34,622 - __main__ - INFO - 
+  Top 5 Features for Demand:
+2025-11-26 02:43:34,622 - __main__ - INFO -     1. demand_kwh_lag_1: 0.3639
+2025-11-26 02:43:34,622 - __main__ - INFO -     2. hour_cos: 0.0699
+2025-11-26 02:43:34,622 - __main__ - INFO -     3. hour: 0.0660
+2025-11-26 02:43:34,622 - __main__ - INFO -     4. is_night: 0.0595
+2025-11-26 02:43:34,622 - __main__ - INFO -     5. demand_kwh_lag_2: 0.0565
+2025-11-26 02:43:34,622 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:34,622 - __main__ - INFO - TRAINING SOLAR MODEL
+2025-11-26 02:43:34,622 - __main__ - INFO - ============================================================
+2025-11-26 02:43:34,623 - __main__ - INFO - 
+📋 Feature Set (9 features):
+2025-11-26 02:43:34,623 - __main__ - INFO -    1. hour
+2025-11-26 02:43:34,623 - __main__ - INFO -    2. month
+2025-11-26 02:43:34,623 - __main__ - INFO -    3. hour_sin
+2025-11-26 02:43:34,623 - __main__ - INFO -    4. hour_cos
+2025-11-26 02:43:34,623 - __main__ - INFO -    5. is_night
+2025-11-26 02:43:34,623 - __main__ - INFO -    6. generation_kwh_lag_1
+2025-11-26 02:43:34,623 - __main__ - INFO -    7. irradiance
+2025-11-26 02:43:34,623 - __main__ - INFO -    8. cloud_cover
+2025-11-26 02:43:34,623 - __main__ - INFO -    9. temperature
+2025-11-26 02:43:34,623 - __main__ - INFO - 
+  🔍 Tuning hyperparameters for SOLAR...
+2025-11-26 02:43:37,023 - __main__ - INFO -   ✓ Best CV MAE: 0.0040
+2025-11-26 02:43:37,023 - __main__ - INFO -   ✓ Best params: {'subsample': 0.8, 'n_estimators': 1500, 'min_child_weight': 3, 'max_depth': 3, 'learning_rate': 0.05, 'gamma': 0, 'colsample_bytree': 0.9}
+2025-11-26 02:43:37,023 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:37,023 - __main__ - INFO - EVALUATION: SOLAR MODEL
+2025-11-26 02:43:37,023 - __main__ - INFO - ============================================================
+2025-11-26 02:43:37,088 - __main__ - INFO - 
+📊 Training Set:
+2025-11-26 02:43:37,089 - __main__ - INFO -    MAE:  0.0023 kWh
+2025-11-26 02:43:37,089 - __main__ - INFO -    RMSE: 0.0039 kWh
+2025-11-26 02:43:37,089 - __main__ - INFO - 
+📊 Test Set:
+2025-11-26 02:43:37,091 - __main__ - INFO -    MAE:  0.0028 kWh
+2025-11-26 02:43:37,091 - __main__ - INFO -    RMSE: 0.0051 kWh
+2025-11-26 02:43:37,091 - __main__ - INFO -    MAPE: 106602402.25%
+2025-11-26 02:43:37,091 - __main__ - INFO - 
+📈 Baseline Comparison:
+2025-11-26 02:43:37,091 - __main__ - INFO -    Naive forecast MAE:    0.8642
+2025-11-26 02:43:37,091 - __main__ - INFO -    Seasonal avg MAE:      0.1786
+2025-11-26 02:43:37,091 - __main__ - INFO - 
+✨ Model Improvement:
+2025-11-26 02:43:37,091 - __main__ - INFO -    vs Naive:    +99.7%
+2025-11-26 02:43:37,091 - __main__ - INFO -    vs Seasonal: +98.4%
+2025-11-26 02:43:37,091 - __main__ - WARNING - ⚠️  Suspiciously low error - check for data leakage!
+2025-11-26 02:43:37,762 - __main__ - INFO -   ✓ Forecast visualization saved to forecast_solar.png
+2025-11-26 02:43:38,200 - __main__ - INFO -   ✓ Feature importance saved to importance_solar.png
+2025-11-26 02:43:38,200 - __main__ - INFO - 
+  Top 5 Features for Solar:
+2025-11-26 02:43:38,200 - __main__ - INFO -     1. irradiance: 0.7082
+2025-11-26 02:43:38,200 - __main__ - INFO -     2. hour_cos: 0.2823
+2025-11-26 02:43:38,200 - __main__ - INFO -     3. cloud_cover: 0.0091
+2025-11-26 02:43:38,200 - __main__ - INFO -     4. month: 0.0002
+2025-11-26 02:43:38,200 - __main__ - INFO -     5. is_night: 0.0000
+2025-11-26 02:43:38,200 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:38,200 - __main__ - INFO - SAVING MODELS
+2025-11-26 02:43:38,200 - __main__ - INFO - ============================================================
+2025-11-26 02:43:38,209 - __main__ - INFO - ✓ Demand model saved: demand_model_20251126_024338.pkl
+2025-11-26 02:43:38,218 - __main__ - INFO - ✓ Solar model saved: solar_model_20251126_024338.pkl
+2025-11-26 02:43:38,218 - __main__ - INFO - 
+✅ All models saved successfully!
+2025-11-26 02:43:38,218 - __main__ - INFO - 
+============================================================
+2025-11-26 02:43:38,218 - __main__ - INFO - 🎉 TRAINING COMPLETED SUCCESSFULLY!
+2025-11-26 02:43:38,218 - __main__ - INFO - ============================================================
